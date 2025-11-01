@@ -175,7 +175,15 @@ function LumaLibrary:Load()
     task.wait(1.2)
     screenGui:Destroy()
     
-    return self
+    local success, mainLib = pcall(function()
+        return loadstring(game:HttpGet("https://raw.githubusercontent.com/lingling729/LumaLibrary/main/UILibrary/UISetUp/Main.lua"))()
+    end)
+    
+    if success and mainLib then
+        return mainLib
+    else
+        return LumaLibrary
+    end
 end
 
 return LumaLibrary

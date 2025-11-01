@@ -1,187 +1,188 @@
--- Loader.lua
--- This is the ONLY file users should loadstring
-local Loader = {}
+local LumaLibrary = {}
 
--- Typing sound
-local function playTypeSound()
-    local sound = Instance.new("Sound")
-    sound.SoundId = "rbxassetid://12221967"
-    sound.Volume = 0.5
-    sound.Parent = game:GetService("SoundService")
-    sound:Play()
-    game:GetService("Debris"):AddItem(sound, 1)
-end
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
 
--- Create loading screen
 local function createLoadingScreen()
     local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "LumaLoader"
+    ScreenGui.Name = "LumaHubLoader"
     ScreenGui.ResetOnSpawn = false
-    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    ScreenGui.Parent = game.CoreGui
     
-    -- Background
+    local success = pcall(function()
+        ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    end)
+    
+    if not success then
+        return nil
+    end
+    
     local Background = Instance.new("Frame")
     Background.Name = "Background"
-    Background.Size = UDim2.new(1, 0, 1, 0)
-    Background.BackgroundColor3 = Color3.fromRGB(10, 10, 15)
+    Background.Size = UDim2.new(0, 700, 0, 700)
+    Background.Position = UDim2.new(0.5, -350, 0.5, -350)
+    Background.BackgroundColor3 = Color3.fromRGB(220, 200, 220)
     Background.BorderSizePixel = 0
     Background.Parent = ScreenGui
     
-    -- Loading container
+    local BackgroundCorner = Instance.new("UICorner")
+    BackgroundCorner.CornerRadius = UDim.new(0, 20)
+    BackgroundCorner.Parent = Background
+    
+    local BackgroundImage = Instance.new("ImageLabel")
+    BackgroundImage.Size = UDim2.new(1, 0, 1, 0)
+    BackgroundImage.BackgroundTransparency = 1
+    BackgroundImage.Image = "rbxassetid://125073427434619"
+    BackgroundImage.ScaleType = Enum.ScaleType.Crop
+    BackgroundImage.Parent = Background
+    
+    local ImageCorner = Instance.new("UICorner")
+    ImageCorner.CornerRadius = UDim.new(0, 20)
+    ImageCorner.Parent = BackgroundImage
+    
+    local Overlay = Instance.new("Frame")
+    Overlay.Size = UDim2.new(1, 0, 1, 0)
+    Overlay.BackgroundColor3 = Color3.fromRGB(255, 240, 250)
+    Overlay.BackgroundTransparency = 0.6
+    Overlay.BorderSizePixel = 0
+    Overlay.Parent = Background
+    
+    local OverlayCorner = Instance.new("UICorner")
+    OverlayCorner.CornerRadius = UDim.new(0, 20)
+    OverlayCorner.Parent = Overlay
+    
+    local BoxStroke = Instance.new("UIStroke")
+    BoxStroke.Color = Color3.fromRGB(200, 50, 120)
+    BoxStroke.Thickness = 4
+    BoxStroke.Transparency = 0
+    BoxStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    BoxStroke.Parent = Background
+    
     local Container = Instance.new("Frame")
-    Container.Name = "Container"
-    Container.Size = UDim2.new(0, 400, 0, 200)
-    Container.Position = UDim2.new(0.5, -200, 0.5, -100)
+    Container.Size = UDim2.new(1, -40, 0, 200)
+    Container.Position = UDim2.new(0.5, 0, 0.5, 0)
+    Container.AnchorPoint = Vector2.new(0.5, 0.5)
     Container.BackgroundTransparency = 1
     Container.Parent = Background
     
-    -- Title text
     local Title = Instance.new("TextLabel")
-    Title.Name = "Title"
-    Title.Size = UDim2.new(1, 0, 0, 80)
-    Title.Position = UDim2.new(0, 0, 0, 0)
+    Title.Size = UDim2.new(1, 0, 0, 100)
+    Title.Position = UDim2.new(0.5, 0, 0, 0)
+    Title.AnchorPoint = Vector2.new(0.5, 0)
     Title.BackgroundTransparency = 1
     Title.Text = ""
-    Title.TextColor3 = Color3.fromRGB(255, 50, 150) -- Neon pink
-    Title.TextSize = 48
-    Title.Font = Enum.Font.GothamBold
-    Title.TextTransparency = 0
+    Title.TextColor3 = Color3.fromRGB(255, 50, 150)
+    Title.TextSize = 90
+    Title.Font = Enum.Font.FredokaOne
+    Title.TextScaled = false
     Title.Parent = Container
     
-    -- Add text stroke for glow effect
-    local Stroke = Instance.new("UIStroke")
-    Stroke.Color = Color3.fromRGB(255, 50, 150)
-    Stroke.Thickness = 2
-    Stroke.Transparency = 0.3
-    Stroke.Parent = Title
+    local OuterStroke = Instance.new("UIStroke")
+    OuterStroke.Color = Color3.fromRGB(255, 100, 200)
+    OuterStroke.Thickness = 4
+    OuterStroke.Transparency = 0.3
+    OuterStroke.Parent = Title
     
-    -- Status text
-    local Status = Instance.new("TextLabel")
-    Status.Name = "Status"
-    Status.Size = UDim2.new(1, 0, 0, 30)
-    Status.Position = UDim2.new(0, 0, 0, 100)
-    Status.BackgroundTransparency = 1
-    Status.Text = "Initializing..."
-    Status.TextColor3 = Color3.fromRGB(200, 200, 200)
-    Status.TextSize = 16
-    Status.Font = Enum.Font.Gotham
-    Status.Parent = Container
+    local Underline = Instance.new("Frame")
+    Underline.Size = UDim2.new(0, 0, 0, 6)
+    Underline.Position = UDim2.new(0.5, 0, 0, 110)
+    Underline.AnchorPoint = Vector2.new(0.5, 0)
+    Underline.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
+    Underline.BorderSizePixel = 0
+    Underline.Parent = Container
     
-    -- Loading bar background
-    local BarBack = Instance.new("Frame")
-    BarBack.Name = "BarBack"
-    BarBack.Size = UDim2.new(1, 0, 0, 4)
-    BarBack.Position = UDim2.new(0, 0, 0, 150)
-    BarBack.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-    BarBack.BorderSizePixel = 0
-    BarBack.Parent = Container
+    local UnderlineCorner = Instance.new("UICorner")
+    UnderlineCorner.CornerRadius = UDim.new(1, 0)
+    UnderlineCorner.Parent = Underline
     
-    local BarCorner = Instance.new("UICorner")
-    BarCorner.CornerRadius = UDim.new(1, 0)
-    BarCorner.Parent = BarBack
+    local UnderlineGradient = Instance.new("UIGradient")
+    UnderlineGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 50, 150)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 150, 200)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 50, 150))
+    }
+    UnderlineGradient.Parent = Underline
     
-    -- Loading bar fill
-    local BarFill = Instance.new("Frame")
-    BarFill.Name = "BarFill"
-    BarFill.Size = UDim2.new(0, 0, 1, 0)
-    BarFill.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
-    BarFill.BorderSizePixel = 0
-    BarFill.Parent = BarBack
+    local Credit = Instance.new("TextLabel")
+    Credit.Size = UDim2.new(1, 0, 0, 30)
+    Credit.Position = UDim2.new(0.5, 0, 0, 130)
+    Credit.AnchorPoint = Vector2.new(0.5, 0)
+    Credit.BackgroundTransparency = 1
+    Credit.Text = "made by revin :P"
+    Credit.TextColor3 = Color3.fromRGB(200, 50, 120)
+    Credit.TextSize = 18
+    Credit.Font = Enum.Font.GothamBold
+    Credit.TextTransparency = 0
+    Credit.Parent = Container
     
-    local FillCorner = Instance.new("UICorner")
-    FillCorner.CornerRadius = UDim.new(1, 0)
-    FillCorner.Parent = BarFill
+    task.spawn(function()
+        while OuterStroke.Parent do
+            TweenService:Create(OuterStroke, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0}):Play()
+            task.wait(1.5)
+            TweenService:Create(OuterStroke, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.6}):Play()
+            task.wait(1.5)
+        end
+    end)
     
-    return ScreenGui, Title, Status, BarFill
+    return ScreenGui, Title, Underline, Background, BackgroundImage, Overlay, BoxStroke, OuterStroke, Credit
 end
 
--- Typewriter effect
-local function typewriterEffect(label, text, speed)
+local function typeText(label, underline, text, speed)
     for i = 1, #text do
         label.Text = text:sub(1, i)
-        playTypeSound()
+        
+        local letterWidth = 100
+        TweenService:Create(
+            underline,
+            TweenInfo.new(speed, Enum.EasingStyle.Sine, Enum.EasingDirection.Out),
+            {Size = UDim2.new(0, i * letterWidth, 0, 6)}
+        ):Play()
+        
         task.wait(speed)
     end
 end
 
--- Update loading progress
-local function updateProgress(barFill, status, percentage, statusText)
-    local TweenService = game:GetService("TweenService")
-    local tween = TweenService:Create(
-        barFill,
-        TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        {Size = UDim2.new(percentage, 0, 1, 0)}
-    )
-    tween:Play()
-    status.Text = statusText
-    task.wait(0.3)
-end
-
--- Main loader function
-function Loader:Load()
-    -- Create loading screen
-    local loadScreen, titleLabel, statusLabel, barFill = createLoadingScreen()
+function LumaLibrary:Load()
+    local screenGui, title, underline, background, bgImage, overlay, boxStroke, stroke, credit = createLoadingScreen()
     
-    -- Type "LumaHub"
+    if not screenGui then
+        return nil
+    end
+    
     task.wait(0.5)
-    typewriterEffect(titleLabel, "LumaHub", 0.12)
-    task.wait(0.8)
+    typeText(title, underline, "LumaHub", 0.18)
+    task.wait(2)
     
-    -- Loading sequence
-    updateProgress(barFill, statusLabel, 0.2, "Verifying access...")
-    task.wait(0.5)
-    
-    updateProgress(barFill, statusLabel, 0.4, "Loading components...")
-    task.wait(0.4)
-    
-    updateProgress(barFill, statusLabel, 0.6, "Initializing UI...")
-    task.wait(0.4)
-    
-    updateProgress(barFill, statusLabel, 0.8, "Preparing interface...")
-    task.wait(0.4)
-    
-    updateProgress(barFill, statusLabel, 1.0, "Complete!")
-    task.wait(0.5)
-    
-    -- Fade out loading screen
-    local TweenService = game:GetService("TweenService")
-    local fadeOut = TweenService:Create(
-        loadScreen.Background,
-        TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
-        {BackgroundTransparency = 1}
-    )
-    
-    local fadeTitleOut = TweenService:Create(
-        titleLabel,
-        TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
-        {TextTransparency = 1}
-    )
-    
-    local fadeStatusOut = TweenService:Create(
-        statusLabel,
-        TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
-        {TextTransparency = 1}
-    )
+    local fadeOut = TweenService:Create(background, TweenInfo.new(1), {BackgroundTransparency = 1})
+    local fadeImageOut = TweenService:Create(bgImage, TweenInfo.new(1), {ImageTransparency = 1})
+    local fadeOverlayOut = TweenService:Create(overlay, TweenInfo.new(1), {BackgroundTransparency = 1})
+    local fadeTitleOut = TweenService:Create(title, TweenInfo.new(1), {TextTransparency = 1})
+    local fadeStrokeOut = TweenService:Create(stroke, TweenInfo.new(1), {Transparency = 1})
+    local fadeBoxStrokeOut = TweenService:Create(boxStroke, TweenInfo.new(1), {Transparency = 1})
+    local fadeUnderlineOut = TweenService:Create(underline, TweenInfo.new(1), {BackgroundTransparency = 1})
+    local fadeCreditOut = TweenService:Create(credit, TweenInfo.new(1), {TextTransparency = 1})
     
     fadeOut:Play()
+    fadeImageOut:Play()
+    fadeOverlayOut:Play()
     fadeTitleOut:Play()
-    fadeStatusOut:Play()
+    fadeStrokeOut:Play()
+    fadeBoxStrokeOut:Play()
+    fadeUnderlineOut:Play()
+    fadeCreditOut:Play()
     
-    task.wait(0.6)
-    loadScreen:Destroy()
+    task.wait(1.2)
+    screenGui:Destroy()
     
-    -- Load main library
     local success, mainLib = pcall(function()
-        return loadstring(game:HttpGet("https://raw.githubusercontent.com/lingLing729/LumaLibrary/main/UISetUp/LumaLoader.lua"))()
+        return loadstring(game:HttpGet("https://raw.githubusercontent.com/lingling729/LumaLibrary/UILibrary/UISetUp/LumaLoader.lua"))()
     end)
     
     if success then
         return mainLib
     else
-        warn("[LumaHub] Failed to load main library:", mainLib)
         return nil
     end
 end
 
-return Loader
+return LumaLibrary

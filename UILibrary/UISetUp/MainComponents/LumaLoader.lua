@@ -146,7 +146,8 @@ function LumaLibrary:Load()
     local screenGui, title, underline, background, bgImage, overlay, boxStroke, stroke, credit = createLoadingScreen()
     
     if not screenGui then
-        return nil
+        warn("Failed to create loading screen")
+        return self
     end
     
     task.wait(0.5)
@@ -174,15 +175,7 @@ function LumaLibrary:Load()
     task.wait(1.2)
     screenGui:Destroy()
     
-    local success, mainLib = pcall(function()
-        return loadstring(game:HttpGet("https://raw.githubusercontent.com/lingling729/LumaLibrary/UILibrary/UISetUp/LumaLoader.lua"))()
-    end)
-    
-    if success then
-        return mainLib
-    else
-        return nil
-    end
+    return self
 end
 
 return LumaLibrary

@@ -187,42 +187,100 @@ function MainLibrary:CreateWindow(config)
     
     local ReopenButton = Instance.new("Frame")
     ReopenButton.Name = "ReopenButton"
-    ReopenButton.Size = UDim2.new(0, 180, 0, 50)
-    ReopenButton.Position = UDim2.new(0.5, -90, 0, 10)
+    ReopenButton.Size = UDim2.new(0, 220, 0, 60)
+    ReopenButton.Position = UDim2.new(0.5, -110, 0, 10)
     ReopenButton.BackgroundColor3 = Theme.Secondary
-    ReopenButton.BackgroundTransparency = 0.2
+    ReopenButton.BackgroundTransparency = 0.1
     ReopenButton.BorderSizePixel = 0
     ReopenButton.Visible = false
     ReopenButton.Parent = ScreenGui
     
     local ReopenCorner = Instance.new("UICorner")
-    ReopenCorner.CornerRadius = UDim.new(0, 12)
+    ReopenCorner.CornerRadius = UDim.new(0, 14)
     ReopenCorner.Parent = ReopenButton
     
     local ReopenStroke = Instance.new("UIStroke")
     ReopenStroke.Color = Theme.Accent
-    ReopenStroke.Thickness = 2
-    ReopenStroke.Transparency = 0.5
+    ReopenStroke.Thickness = 2.5
+    ReopenStroke.Transparency = 0.4
+    ReopenStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     ReopenStroke.Parent = ReopenButton
     
+    local ReopenGlow = Instance.new("ImageLabel")
+    ReopenGlow.Size = UDim2.new(1, 30, 1, 30)
+    ReopenGlow.Position = UDim2.new(0.5, 0, 0.5, 0)
+    ReopenGlow.AnchorPoint = Vector2.new(0.5, 0.5)
+    ReopenGlow.BackgroundTransparency = 1
+    ReopenGlow.Image = "rbxassetid://4996891970"
+    ReopenGlow.ImageColor3 = Theme.Accent
+    ReopenGlow.ImageTransparency = 0.8
+    ReopenGlow.ZIndex = 0
+    ReopenGlow.Parent = ReopenButton
+    
+    task.spawn(function()
+        while ReopenGlow.Parent do
+            TweenService:Create(ReopenGlow, TweenInfo.new(2, Enum.EasingStyle.Sine), {ImageTransparency = 0.5}):Play()
+            task.wait(2)
+            TweenService:Create(ReopenGlow, TweenInfo.new(2, Enum.EasingStyle.Sine), {ImageTransparency = 0.9}):Play()
+            task.wait(2)
+        end
+    end)
+    
+    local ReopenIconHolder = Instance.new("Frame")
+    ReopenIconHolder.Size = UDim2.new(0, 45, 0, 45)
+    ReopenIconHolder.Position = UDim2.new(0, 10, 0.5, -22.5)
+    ReopenIconHolder.BackgroundColor3 = Theme.Accent
+    ReopenIconHolder.BackgroundTransparency = 0.2
+    ReopenIconHolder.BorderSizePixel = 0
+    ReopenIconHolder.Parent = ReopenButton
+    
+    local ReopenIconCorner = Instance.new("UICorner")
+    ReopenIconCorner.CornerRadius = UDim.new(0, 10)
+    ReopenIconCorner.Parent = ReopenIconHolder
+    
     local ReopenIcon = Instance.new("ImageLabel")
-    ReopenIcon.Size = UDim2.new(0, 35, 0, 35)
-    ReopenIcon.Position = UDim2.new(0, 10, 0.5, -17.5)
+    ReopenIcon.Size = UDim2.new(1, -8, 1, -8)
+    ReopenIcon.Position = UDim2.new(0, 4, 0, 4)
     ReopenIcon.BackgroundTransparency = 1
     ReopenIcon.Image = WindowIcon
     ReopenIcon.ScaleType = Enum.ScaleType.Fit
-    ReopenIcon.Parent = ReopenButton
+    ReopenIcon.Parent = ReopenIconHolder
+    
+    local ReopenTextContainer = Instance.new("Frame")
+    ReopenTextContainer.Size = UDim2.new(1, -70, 1, 0)
+    ReopenTextContainer.Position = UDim2.new(0, 60, 0, 0)
+    ReopenTextContainer.BackgroundTransparency = 1
+    ReopenTextContainer.Parent = ReopenButton
     
     local ReopenText = Instance.new("TextLabel")
-    ReopenText.Size = UDim2.new(1, -55, 1, 0)
-    ReopenText.Position = UDim2.new(0, 50, 0, 0)
+    ReopenText.Size = UDim2.new(1, 0, 0, 25)
+    ReopenText.Position = UDim2.new(0, 0, 0, 8)
     ReopenText.BackgroundTransparency = 1
     ReopenText.Text = WindowName
     ReopenText.TextColor3 = Theme.Text
-    ReopenText.TextSize = 16
+    ReopenText.TextSize = 17
     ReopenText.Font = WindowFont
     ReopenText.TextXAlignment = Enum.TextXAlignment.Left
-    ReopenText.Parent = ReopenButton
+    ReopenText.TextTruncate = Enum.TextTruncate.AtEnd
+    ReopenText.Parent = ReopenTextContainer
+    
+    local ReopenTextStroke = Instance.new("UIStroke")
+    ReopenTextStroke.Color = Theme.Accent
+    ReopenTextStroke.Thickness = 1
+    ReopenTextStroke.Transparency = 0.7
+    ReopenTextStroke.Parent = ReopenText
+    
+    local ReopenSubtext = Instance.new("TextLabel")
+    ReopenSubtext.Size = UDim2.new(1, 0, 0, 20)
+    ReopenSubtext.Position = UDim2.new(0, 0, 0, 32)
+    ReopenSubtext.BackgroundTransparency = 1
+    ReopenSubtext.Text = "Click to open • RShift"
+    ReopenSubtext.TextColor3 = Theme.Text
+    ReopenSubtext.TextTransparency = 0.4
+    ReopenSubtext.TextSize = 12
+    ReopenSubtext.Font = Enum.Font.Gotham
+    ReopenSubtext.TextXAlignment = Enum.TextXAlignment.Left
+    ReopenSubtext.Parent = ReopenTextContainer
     
     local ReopenClick = Instance.new("TextButton")
     ReopenClick.Size = UDim2.new(1, 0, 1, 0)

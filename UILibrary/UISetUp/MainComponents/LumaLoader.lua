@@ -15,74 +15,111 @@ local function createNotification()
     end)
     
     local NotifFrame = Instance.new("Frame")
-    NotifFrame.Size = UDim2.new(0, 350, 0, 120)
-    NotifFrame.Position = UDim2.new(1, 370, 1, -140)
-    NotifFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
-    NotifFrame.BackgroundTransparency = 0.2
+    NotifFrame.Size = UDim2.new(0, 380, 0, 140)
+    NotifFrame.Position = UDim2.new(1, 400, 1, -160)
+    NotifFrame.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+    NotifFrame.BackgroundTransparency = 0.15
     NotifFrame.BorderSizePixel = 0
     NotifFrame.Parent = NotifGui
     
     local NotifCorner = Instance.new("UICorner")
-    NotifCorner.CornerRadius = UDim.new(0, 15)
+    NotifCorner.CornerRadius = UDim.new(0, 18)
     NotifCorner.Parent = NotifFrame
     
     local NotifStroke = Instance.new("UIStroke")
-    NotifStroke.Color = Color3.fromRGB(180, 50, 130)
-    NotifStroke.Thickness = 2
-    NotifStroke.Transparency = 0.3
+    NotifStroke.Color = Color3.fromRGB(200, 60, 140)
+    NotifStroke.Thickness = 2.5
+    NotifStroke.Transparency = 0.2
     NotifStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     NotifStroke.Parent = NotifFrame
     
-    local NotifGlow = Instance.new("UIStroke")
-    NotifGlow.Color = Color3.fromRGB(200, 80, 160)
-    NotifGlow.Thickness = 4
-    NotifGlow.Transparency = 0.7
-    NotifGlow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    local NotifGlow = Instance.new("ImageLabel")
+    NotifGlow.Size = UDim2.new(1, 40, 1, 40)
+    NotifGlow.Position = UDim2.new(0.5, 0, 0.5, 0)
+    NotifGlow.AnchorPoint = Vector2.new(0.5, 0.5)
+    NotifGlow.BackgroundTransparency = 1
+    NotifGlow.Image = "rbxassetid://4996891970"
+    NotifGlow.ImageColor3 = Color3.fromRGB(255, 80, 160)
+    NotifGlow.ImageTransparency = 0.7
+    NotifGlow.ZIndex = 0
     NotifGlow.Parent = NotifFrame
     
+    local AccentBar = Instance.new("Frame")
+    AccentBar.Size = UDim2.new(0, 4, 1, 0)
+    AccentBar.BackgroundColor3 = Color3.fromRGB(255, 60, 150)
+    AccentBar.BorderSizePixel = 0
+    AccentBar.Parent = NotifFrame
+    
+    local BarCorner = Instance.new("UICorner")
+    BarCorner.CornerRadius = UDim.new(1, 0)
+    BarCorner.Parent = AccentBar
+    
+    local NotifIcon = Instance.new("ImageLabel")
+    NotifIcon.Size = UDim2.new(0, 40, 0, 40)
+    NotifIcon.Position = UDim2.new(0, 15, 0, 15)
+    NotifIcon.BackgroundColor3 = Color3.fromRGB(255, 60, 150)
+    NotifIcon.BackgroundTransparency = 0.2
+    NotifIcon.BorderSizePixel = 0
+    NotifIcon.Image = "rbxassetid://101168459537585"
+    NotifIcon.ScaleType = Enum.ScaleType.Fit
+    NotifIcon.Parent = NotifFrame
+    
+    local IconCorner = Instance.new("UICorner")
+    IconCorner.CornerRadius = UDim.new(0, 10)
+    IconCorner.Parent = NotifIcon
+    
     local NotifTitle = Instance.new("TextLabel")
-    NotifTitle.Size = UDim2.new(1, -20, 0, 25)
-    NotifTitle.Position = UDim2.new(0, 10, 0, 10)
+    NotifTitle.Size = UDim2.new(1, -75, 0, 30)
+    NotifTitle.Position = UDim2.new(0, 65, 0, 15)
     NotifTitle.BackgroundTransparency = 1
-    NotifTitle.Text = "LumaLibrary"
-    NotifTitle.TextColor3 = Color3.fromRGB(255, 200, 240)
-    NotifTitle.TextSize = 18
-    NotifTitle.Font = Enum.Font.FredokaOne
+    NotifTitle.Text = "✨ LumaLibrary"
+    NotifTitle.TextColor3 = Color3.fromRGB(255, 220, 245)
+    NotifTitle.TextSize = 20
+    NotifTitle.Font = Enum.Font.GothamBold
     NotifTitle.TextXAlignment = Enum.TextXAlignment.Left
     NotifTitle.Parent = NotifFrame
     
+    local TitleStroke = Instance.new("UIStroke")
+    TitleStroke.Color = Color3.fromRGB(255, 100, 180)
+    TitleStroke.Thickness = 1
+    TitleStroke.Transparency = 0.6
+    TitleStroke.Parent = NotifTitle
+    
     local NotifText = Instance.new("TextLabel")
-    NotifText.Size = UDim2.new(1, -20, 1, -45)
-    NotifText.Position = UDim2.new(0, 10, 0, 35)
+    NotifText.Size = UDim2.new(1, -75, 0, 75)
+    NotifText.Position = UDim2.new(0, 65, 0, 50)
     NotifText.BackgroundTransparency = 1
-    NotifText.Text = "This script was made using the UI Library LumaLibrary. You can find it at:\ngithub.com/lingling729/LumaLibrary\nHave fun using the script!"
-    NotifText.TextColor3 = Color3.fromRGB(220, 220, 220)
-    NotifText.TextSize = 12
+    NotifText.Text = "This script uses LumaLibrary!\n\nFind it at: github.com/lingling729\n\nHave fun! 💖"
+    NotifText.TextColor3 = Color3.fromRGB(230, 230, 230)
+    NotifText.TextSize = 13
     NotifText.Font = Enum.Font.Gotham
     NotifText.TextXAlignment = Enum.TextXAlignment.Left
     NotifText.TextYAlignment = Enum.TextYAlignment.Top
     NotifText.TextWrapped = true
     NotifText.Parent = NotifFrame
     
-    TweenService:Create(NotifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(1, -370, 1, -140)}):Play()
+    TweenService:Create(NotifFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(1, -400, 1, -160)}):Play()
     
     task.spawn(function()
-        for i = 1, 3 do
-            TweenService:Create(NotifGlow, TweenInfo.new(1, Enum.EasingStyle.Sine), {Transparency = 0.3}):Play()
-            task.wait(1)
-            TweenService:Create(NotifGlow, TweenInfo.new(1, Enum.EasingStyle.Sine), {Transparency = 0.8}):Play()
-            task.wait(1)
+        for i = 1, 4 do
+            TweenService:Create(NotifGlow, TweenInfo.new(1.2, Enum.EasingStyle.Sine), {ImageTransparency = 0.4}):Play()
+            task.wait(1.2)
+            TweenService:Create(NotifGlow, TweenInfo.new(1.2, Enum.EasingStyle.Sine), {ImageTransparency = 0.8}):Play()
+            task.wait(1.2)
         end
     end)
     
-    task.wait(5)
+    task.wait(6)
     
-    TweenService:Create(NotifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Position = UDim2.new(1, 370, 1, -140)}):Play()
+    TweenService:Create(NotifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Position = UDim2.new(1, 400, 1, -160)}):Play()
     TweenService:Create(NotifFrame, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
     TweenService:Create(NotifTitle, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
     TweenService:Create(NotifText, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
     TweenService:Create(NotifStroke, TweenInfo.new(0.5), {Transparency = 1}):Play()
-    TweenService:Create(NotifGlow, TweenInfo.new(0.5), {Transparency = 1}):Play()
+    TweenService:Create(NotifGlow, TweenInfo.new(0.5), {ImageTransparency = 1}):Play()
+    TweenService:Create(AccentBar, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
+    TweenService:Create(NotifIcon, TweenInfo.new(0.5), {ImageTransparency = 1, BackgroundTransparency = 1}):Play()
+    TweenService:Create(TitleStroke, TweenInfo.new(0.5), {Transparency = 1}):Play()
     
     task.wait(0.6)
     NotifGui:Destroy()
